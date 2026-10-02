@@ -213,16 +213,13 @@ export default function Navbar() {
                 </AnimatePresence>
 
                 <div className="flex items-center gap-2">
-                    <Link href="#login" onClick={closeAll} className={`${linkClass} hidden md:inline-flex`}>
-                        Log in
-                    </Link>
 
                     <Link
                         href="#start"
                         onClick={closeAll}
                         className="hidden items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-b from-[#4a4a4a] via-[#2a2a2a] to-[#121212] px-4 py-1.5 text-xs font-medium text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),0_2px_8px_rgba(0,0,0,0.25)] transition hover:brightness-110 active:scale-95 md:inline-flex md:text-sm"
                     >
-                        Start for free
+                        Contact us
                     </Link>
 
                     <button

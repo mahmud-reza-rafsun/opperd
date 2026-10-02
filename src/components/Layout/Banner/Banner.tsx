@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 const VIDEO_SOURCES = [
-    { src: "https://assets.mixkit.co/videos/31802/31802-720.mp4", type: "video/mp4" },
+    { src: "/banner.mp4", type: "video/mp4" },
 ];
 
 const FEATURES = [
@@ -27,7 +27,7 @@ export default function Hero() {
     const reduce = useReducedMotion();
 
     return (
-        <section className="relative isolate overflow-hidden bg-white pb-20 pt-32 dark:bg-neutral-950 sm:pb-28 sm:pt-40">
+        <section className="relative isolate overflow-hidden bg-neutral-50/50 pb-20 pt-32 dark:bg-neutral-950 sm:pb-28 sm:pt-40">
             <div className="px-4">
                 <div className="mx-auto max-w-[1080px] pl-[21px] pr-[9px]">
                     <div className="flex flex-col items-start text-left">
@@ -108,7 +108,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-                        className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3"
+                        className="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-3"
                     >
                         {FEATURES.map((item, index) => (
                             <div key={index} className="flex flex-col">
