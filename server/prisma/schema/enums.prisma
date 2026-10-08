@@ -1,0 +1,46 @@
+enum Role {
+    ADMIN
+    CUSTOMER
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+enum ProjectStatus {
+    PENDING
+    PLANNING
+    IN_PROGRESS
+    ON_HOLD
+    COMPLETED
+    CANCELLED
+}
+
+enum PaymentStatus {
+    PENDING
+    PAID
+    FAILED
+    REFUNDED
+}
+
+enum PaymentType {
+    ADVANCE
+    INSTALLMENT
+    FINAL
+}
+
+enum PaymentMethod {
+    BKASH
+    STRIPE
+}
+
+enum ExpenseCategory {
+    HOSTING
+    DOMAIN
+    TOOLS
+    FREELANCER
+    MARKETING
+    OTHER
+}

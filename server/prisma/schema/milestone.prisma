@@ -1,0 +1,13 @@
+model Milestone {
+    id          String    @id @default(uuid())
+    title       String
+    weight      Int       @default(1)
+    order       Int       @default(0)
+    isCompleted Boolean   @default(false)
+    completedAt DateTime?
+    projectId   String
+    project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@index([projectId])
+    @@map("milestone")
+}

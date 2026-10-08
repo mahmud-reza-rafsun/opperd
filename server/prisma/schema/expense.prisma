@@ -1,0 +1,18 @@
+model Expense {
+    id       String          @id @default(uuid())
+    title    String
+    amount   Int
+    category ExpenseCategory @default(OTHER)
+    note     String?
+    spentAt  DateTime        @default(now())
+
+    projectId String?
+    project   Project? @relation(fields: [projectId], references: [id], onDelete: Restrict)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([projectId])
+    @@index([spentAt])
+    @@map("expense")
+}

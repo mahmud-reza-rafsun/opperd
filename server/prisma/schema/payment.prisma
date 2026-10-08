@@ -1,0 +1,31 @@
+model Payment {
+    id        String        @id @default(uuid())
+    amount    Int
+    currency  String        @default("BDT")
+    amountBdt Int
+    type      PaymentType   @default(ADVANCE)
+    method    PaymentMethod
+    status    PaymentStatus @default(PENDING)
+
+    gatewayPaymentId String? @unique
+    trxId            String? @unique
+    payerNumber      String?
+    gatewayResponse  Json?
+
+    note    String?
+    dueDate DateTime?
+    paidAt  DateTime?
+
+    projectId  String
+    project    Project @relation(fields: [projectId], references: [id], onDelete: Restrict)
+    customerId String
+    customer   User    @relation("CustomerPayments", fields: [customerId], references: [id], onDelete: Restrict)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([projectId])
+    @@index([customerId, createdAt])
+    @@index([status, paidAt])
+    @@map("payment")
+}
