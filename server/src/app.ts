@@ -6,9 +6,6 @@ import { cors } from "./config/cors";
 import { httpLogger } from "./config/logger";
 import { globalLimiter } from "./config/rate-limit";
 import { apiRoutes } from "./routes";
-import { auth } from "./lib/auth";
-import { toNodeHandler } from "better-auth/node";
-import { authLimiter } from "./config/rate-limit";
 import path from "path";
 import { notFound } from "./shared/middlewares/notFound";
 import { globalErrorHandler } from "./shared/middlewares/errorHandler";
@@ -33,11 +30,11 @@ if (process.env.NODE_ENV === "production") {
 
 app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({
-    title: "Welcome to your Express app",
+    title: "Opperd APIs",
     description:
-      "Built with StackKit - A production-ready Express template with TypeScript, security, and best practices.",
+      "Built with Mordern Tech - A production-ready Express Server with TypeScript, security, and best practices.",
     version: "1.0.0",
-    docs: "https://github.com/tariqul420/stackkit",
+    docs: "https://github.com/mahmud-reza-rafsun/opperd",
   });
 });
 

@@ -7,24 +7,8 @@ import { cookieUtils } from "../../shared/utils/cookie";
 import { sendResponse } from "../../shared/utils/send-response";
 import { tokenUtils } from "../../shared/utils/token";
 import { authService } from "./auth.service";
-import type { NeedsVerification, SocialProvider } from "./auth.type";
 import { AppError } from "../../shared/errors/appError";
-
-const getSocialAuthPayload = (
-  provider: SocialProvider,
-  redirectPath: string,
-) => {
-  const authBaseUrl = envVars.APP_URL || envVars.BETTER_AUTH_URL;
-  const encodedRedirectPath = encodeURIComponent(redirectPath);
-  const callbackURL = `${authBaseUrl}/api/v1/auth/${provider}/success?redirect=${encodedRedirectPath}`;
-  const signInEndpoint = `/api/auth/sign-in/social`;
-
-  return {
-    provider,
-    callbackURL,
-    signInEndpoint,
-  };
-};
+import { NeedsVerification } from "./auth.type";
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
@@ -240,88 +224,28 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const SUPPORTED_PROVIDERS: SocialProvider[] = [
-  "google",
-  "github",
-  "facebook",
-  "twitter",
-  "discord",
-];
 
-const socialLogin = catchAsync((req: Request, res: Response) => {
-  const provider = req.params.provider as SocialProvider;
-  const redirectPath = (req.query.redirect as string) || "/dashboard";
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
 
-  if (!SUPPORTED_PROVIDERS.includes(provider)) {
-    throw new AppError(
-      status.BAD_REQUEST,
-      `Unsupported social provider: ${provider}`,
-    );
-  }
+  const result = await authService.googleLogin(payload);
 
-  const payload = getSocialAuthPayload(provider, redirectPath);
+  const { accessToken, refreshToken } = result;
 
-  return sendResponse(res, {
+  tokenUtils.setAccessTokenCookie(res, accessToken);
+  tokenUtils.setRefreshTokenCookie(res, refreshToken);
+
+  sendResponse(res, {
     status: status.OK,
     success: true,
-    message: `${provider} login payload generated successfully`,
-    data: payload,
-  });
-});
-
-const socialLoginSuccess = catchAsync(async (req: Request, res: Response) => {
-  const provider = req.params.provider || "google";
-  const redirectPath = (req.query.redirect as string) || "/dashboard";
-  const isValidRedirectPath =
-    redirectPath.startsWith("/") && !redirectPath.startsWith("//");
-  const finalRedirectPath = isValidRedirectPath ? redirectPath : "/dashboard";
-
-  const sessionToken = req.cookies["better-auth.session_token"];
-
-  if (!sessionToken) {
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`);
-  }
-
-  const session = await auth.api.getSession({
-    headers: {
-      Cookie: `better-auth.session_token=${sessionToken}`,
+    message: "Google login successful",
+    data: {
+      accessToken,
+      refreshToken,
     },
   });
-
-  if (!session?.user) {
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`);
-  }
-
-  let accessToken: string;
-  let refreshToken: string;
-
-  try {
-    const result = await authService.socialLoginSuccess(session);
-    accessToken = result.accessToken;
-    refreshToken = result.refreshToken;
-  } catch (error) {
-    const message =
-      error instanceof AppError
-        ? encodeURIComponent(error?.message)
-        : "oauth_failed";
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=${message}`);
-  }
-
-  const callbackUrl = new URL(
-    `${envVars.FRONTEND_URL}/api/auth/callback/${provider}`,
-  );
-  callbackUrl.searchParams.set("accessToken", accessToken);
-  callbackUrl.searchParams.set("refreshToken", refreshToken);
-  callbackUrl.searchParams.set("token", sessionToken);
-  callbackUrl.searchParams.set("redirect", finalRedirectPath);
-
-  res.redirect(callbackUrl.toString());
 });
 
-const handleOAuthError = catchAsync((req: Request, res: Response) => {
-  const error = req.query.error as string || "oauth_failed";
-  res.redirect(`${envVars.FRONTEND_URL}/login?error=${error}`);
-})
 
 export const authController = {
   registerUser,
@@ -335,7 +259,5 @@ export const authController = {
   resendOTP,
   forgetPassword,
   resetPassword,
-  socialLogin,
-  socialLoginSuccess,
-  handleOAuthError,
+  googleLogin
 };

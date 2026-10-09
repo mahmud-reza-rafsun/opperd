@@ -19,6 +19,9 @@ CREATE TYPE "PaymentMethod" AS ENUM ('BKASH', 'STRIPE');
 -- CreateEnum
 CREATE TYPE "ExpenseCategory" AS ENUM ('HOSTING', 'DOMAIN', 'TOOLS', 'FREELANCER', 'MARKETING', 'OTHER');
 
+-- CreateEnum
+CREATE TYPE "AuthProvider" AS ENUM ('GOOGLE', 'CREDENTIAL');
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
@@ -27,6 +30,8 @@ CREATE TABLE "user" (
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "role" "Role" NOT NULL DEFAULT 'CUSTOMER',
     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
+    "googleId" TEXT,
+    "authProvider" "AuthProvider" NOT NULL DEFAULT 'CREDENTIAL',
     "needPasswordChange" BOOLEAN NOT NULL DEFAULT false,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "deletedAt" TIMESTAMP(3),
@@ -201,6 +206,9 @@ CREATE TABLE "project_update" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "user_googleId_key" ON "user"("googleId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "session_token_key" ON "session"("token");

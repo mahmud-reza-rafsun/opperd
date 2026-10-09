@@ -16,9 +16,7 @@ router.post("/verify-email", authController.verifyEmail)
 router.post("/forget-password", authController.forgetPassword)
 router.post("/reset-password", authController.resetPassword)
 router.post("/resend-otp", authController.resendOTP);
-router.get("/login/:provider", authController.socialLogin);
-router.get("/:provider/success", authController.socialLoginSuccess);
-router.get("/oauth/error", authController.handleOAuthError);
+router.post("/google-login", authController.googleLogin);
 router.patch(
   "/profile",
   checkAuth(Role.ADMIN, Role.CUSTOMER),

@@ -44,3 +44,8 @@ enum ExpenseCategory {
     MARKETING
     OTHER
 }
+
+enum AuthProvider {
+    GOOGLE
+    CREDENTIAL
+}
