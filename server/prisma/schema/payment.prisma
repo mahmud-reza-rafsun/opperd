@@ -1,0 +1,29 @@
+model Payment {
+  id              String        @id @default(uuid())
+  buyerId         String
+  productId       String?
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        Currency      @default(BDT)
+  status          PaymentStatus @default(PENDING)
+  method          PaymentMethod
+  type            PaymentType   @default(PRODUCT_PURCHASE)
+
+  // Gateway info
+  transactionId   String?       @unique  // gateway er transaction id
+  gatewayResponse Json?                  // raw response store
+
+  // Refund
+  refundedAt      DateTime?
+  refundReason    String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  buyer           User          @relation(fields: [buyerId], references: [id])
+  product         Product?      @relation(fields: [productId], references: [id])
+
+  @@index([buyerId])
+  @@index([productId])
+  @@index([status])
+  @@map("payment")
+}

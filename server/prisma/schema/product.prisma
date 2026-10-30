@@ -1,0 +1,36 @@
+model Product {
+  id           String           @id @default(uuid())
+  sellerId     String
+  title        String
+  slug         String           @unique
+  description  String           @db.Text
+  categoryId   String
+  thumbnail    String?
+  images       String[]         @default([])
+  price        Decimal          @db.Decimal(10, 2)
+  currency     Currency         @default(EUR)
+  condition    ProductCondition @default(GOOD)
+  listingType  ListingType      @default(SELL)
+  deliveryDays Int
+  revisions    Int              @default(1)
+  status       ProductStatus    @default(DRAFT)
+  isFeatured   Boolean          @default(false)
+  isDeleted    Boolean          @default(false)
+  deletedAt    DateTime?
+  viewCount    Int              @default(0)
+  expiresAt    DateTime?
+
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  seller       User             @relation(fields: [sellerId], references: [id])
+  category     Category         @relation(fields: [categoryId], references: [id])
+  reports      Report[]
+  payments     Payment[]
+  cartItems    CartItem[]
+
+  @@index([sellerId, status])
+  @@index([categoryId, status])
+  @@index([status, createdAt])
+  @@map("product")
+}

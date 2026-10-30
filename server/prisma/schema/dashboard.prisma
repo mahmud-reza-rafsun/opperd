@@ -1,0 +1,35 @@
+model Dashboard {
+  id               String          @id @default(uuid())
+  period           DashboardPeriod
+  date             DateTime
+
+  // Users
+  totalUsers       Int             @default(0)
+  newUsers         Int             @default(0)
+  activeUsers      Int             @default(0)
+  blockedUsers     Int             @default(0)
+
+  // Products
+  totalProducts    Int             @default(0)
+  activeListings   Int             @default(0)
+  soldProducts     Int             @default(0)
+  featuredProducts Int             @default(0)
+  newListings      Int             @default(0)
+
+  // Revenue
+  totalRevenue     Decimal         @db.Decimal(12, 2) @default(0)
+  featuredRevenue  Decimal         @db.Decimal(12, 2) @default(0)
+  refundedAmount   Decimal         @db.Decimal(12, 2) @default(0)
+
+  // Engagement
+  totalReports     Int             @default(0)
+  resolvedReports  Int             @default(0)
+  totalChats       Int             @default(0)
+  totalFavorites   Int             @default(0)
+
+  createdAt        DateTime        @default(now())
+
+  @@unique([period, date])
+  @@index([period, date])
+  @@map("dashboard")
+}

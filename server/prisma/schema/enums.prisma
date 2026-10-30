@@ -1,0 +1,87 @@
+enum Role {
+    SUPER_ADMIN
+    CX_ADMIN
+    CUSTOMER
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+enum ProductStatus {
+    DRAFT
+    ACTIVE
+    SOLD
+    RESERVED
+    EXPIRED
+    BANNED
+}
+
+enum ProductCondition {
+    NEW
+    LIKE_NEW
+    GOOD
+    FAIR
+    FOR_PARTS
+}
+
+enum ListingType {
+  SELL
+  RENT
+  FREE
+}
+
+enum ReportReason {
+  SPAM
+  FAKE_PRODUCT
+  WRONG_CATEGORY
+  PROHIBITED_ITEM
+  SCAM
+  OTHER
+}
+
+enum Currency {
+  BDT  // Bangladeshi Taka
+  USD  // US Dollar
+  GBP  // British Pound
+  EUR  // Euro
+  AED  // UAE Dirham
+  SAR  // Saudi Riyal
+  QAR  // Qatari Riyal
+  KWD  // Kuwaiti Dinar
+  BHD  // Bahraini Dinar
+  OMR  // Omani Rial
+  CAD  // Canadian Dollar
+  AUD  // Australian Dollar
+}
+
+enum DashboardPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  STRIPE
+  BKASH
+  NAGAD
+  BANK_TRANSFER
+  CASH_ON_DELIVERY
+}
+
+enum PaymentType {
+  PRODUCT_PURCHASE
+  FEATURED_BOOST
+  SUBSCRIPTION
+}
