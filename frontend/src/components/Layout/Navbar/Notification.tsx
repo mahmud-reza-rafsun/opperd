@@ -29,10 +29,10 @@ export default function NotificationDropdown() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="relative w-9.5 h-9.5 flex items-center justify-center rounded-lg text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
+                <Button variant="outline" className="relative h-9 w-9 text-zinc-700 dark:text-zinc-200 cursor-pointer">
                     <Bell size={20} />
                     {unreadCount > 0 && (
-                        <span className="absolute top-0.5 right-0.5 min-w-[14px] h-3.5 px-0.5 rounded-full bg-red-500 border border-white dark:border-zinc-900 flex items-center justify-center text-[9px] font-bold text-white leading-none pointer-events-none">
+                        <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
                             {unreadCount > 99 ? "99+" : unreadCount}
                         </span>
                     )}

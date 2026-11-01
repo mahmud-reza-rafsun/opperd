@@ -347,6 +347,23 @@ const handleOAuthError = catchAsync((req: Request, res: Response) => {
   res.redirect(`${envVars.FRONTEND_URL}/login?error=${error}`);
 })
 
+const getUserSession = catchAsync(
+  async (req: Request, res: Response) => {
+    const session = await authService.getUserSession(req as any);
+
+    if (!session) {
+      throw new AppError(status.UNAUTHORIZED, "No active session found");
+    }
+
+    sendResponse(res, {
+      status: status.OK,
+      success: true,
+      message: "User Session retrieved successfully",
+      data: session,
+    });
+  }
+);
+
 export const authController = {
   registerUser,
   loginUser,
@@ -362,4 +379,5 @@ export const authController = {
   socialLogin,
   socialLoginSuccess,
   handleOAuthError,
+  getUserSession
 };

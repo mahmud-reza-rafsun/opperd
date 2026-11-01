@@ -237,4 +237,35 @@ export const authService = {
             return { data: null, error: error?.message || "Something went wrong" };
         }
     },
+
+    getMe: async function () {
+        try {
+            const cookieStore = await cookies();
+
+            const response = await fetch(`${AUTH_URL}/api/v1/auth/session`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Cookie: cookieStore.toString(),
+                },
+                cache: "no-store",
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                return {
+                    data: null,
+                    error: errorData?.message || "Failed to fetch user profiles",
+                };
+            }
+
+            const data = await response.json();
+            console.log(data);
+            return { data, error: null };
+        } catch (error: any) {
+            return { data: null, error: error?.message || "Something went wrong" };
+        }
+    }
+
+
 };

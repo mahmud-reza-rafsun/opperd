@@ -1,87 +1,108 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
-import { Loader2, User as UserIcon, AlertCircle } from "lucide-react";
+import { useState } from 'react';
+import Link from 'next/link';
+import { LayoutDashboard, User as UserIcon, LogOut, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
-interface UserData {
-    id?: string;
-    name?: string;
-    email?: string;
-    image?: string;
-    role?: string;
-    [key: string]: any;
-}
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { useUser } from '@/hooks/useUser';
+import { User } from '@/types/user.type';
+import { LogoutAction } from '../auth/actions/LogoutAction';
 
-export default function User() {
-    const [user, setUser] = useState<UserData | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+export default function UserSession() {
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const { user, loading } = useUser() as { user: User | null; loading: boolean };
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                setLoading(true);
-                const res = await fetch("/api/me");
-                const data = await res.json();
+    const handleLogout = async () => {
+        setIsLoggingOut(true);
+        const toastId = toast.loading("Logging out...");
 
-                if (data.success && data.user) {
-                    setUser(data.user);
-                } else {
-                    setError(data.error || "User data not found");
-                }
-            } catch (err: any) {
-                setError(err.message || "Failed to load user profile");
-            } finally {
-                setLoading(false);
+        try {
+            const result = await LogoutAction();
+
+            if (!result.success) {
+                throw new Error(result.error || "Failed to logout");
             }
-        };
 
-        fetchUser();
-    }, []);
+            toast.success("Logged out successfully.", { id: toastId });
+            window.location.href = "/";
+        } catch (error: any) {
+            toast.error(error.message || "Failed to logout", { id: toastId });
+            setIsLoggingOut(false);
+        }
+    };
 
-    // Loading State
     if (loading) {
         return (
-            <div className="flex items-center gap-2 p-4 text-sm text-neutral-500">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Loading profile...</span>
+            <div className="flex items-center justify-center p-2">
+                <Loader2 className="h-5 w-5 animate-spin text-indigo-500" />
             </div>
         );
     }
 
-    // Error State
-    if (error || !user) {
-        return (
-            <div className="flex items-center gap-2 p-4 text-sm text-red-500 bg-red-50 dark:bg-red-950/20 rounded-xl">
-                <AlertCircle className="h-4 w-4" />
-                <span>{error || "Not authenticated"}</span>
-            </div>
-        );
-    }
+    if (!user) return null;
 
-    // User Profile Card Component
     return (
-        <div className="flex items-center gap-3 p-3 rounded-2xl border border-neutral-200/80 bg-white dark:border-neutral-800 dark:bg-neutral-900/60">
-            {user.image ? (
-                <img
-                    src={user.image}
-                    alt={user.name || "User Avatar"}
-                    className="h-10 w-10 rounded-full object-cover"
-                />
-            ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                    <UserIcon className="h-5 w-5" />
-                </div>
-            )}
+        <div className="flex items-center">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="relative h-11 w-11 border-blue-500 cursor-pointer rounded-full transition-all active:scale-95">
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage className='object-cover' src={user.avatarUrl || user.image} alt={user.name} />
+                            <AvatarFallback className="bg-blue-500 text-white">
+                                {user.name?.charAt(0).toUpperCase() || "U"}
+                            </AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
 
-            <div className="flex flex-col">
-                <span className="text-sm font-semibold text-neutral-900 dark:text-white">
-                    {user.name || "Anonymous User"}
-                </span>
-                <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                    {user.email || "No email available"}
-                </span>
-            </div>
+                <DropdownMenuContent className="w-56 mt-2" align="end" sideOffset={8}>
+                    <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                            <p className="text-sm font-semibold leading-none">{user.name}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+                            <p className="text-xs leading-none text-muted-foreground/80">{user.email}</p>
+                        </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem asChild>
+                        <Link href="/dashboard" className="cursor-pointer w-full flex items-center">
+                            <LayoutDashboard className="mr-2 h-4 w-4" />
+                            <span>Dashboard</span>
+                        </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                        <Link href="/profile" className="cursor-pointer w-full flex items-center">
+                            <UserIcon className="mr-2 h-4 w-4" />
+                            <span>Profile Settings</span>
+                        </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
+                    >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>{isLoggingOut ? "Logging out.." : "Logout"}</span>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     );
 }

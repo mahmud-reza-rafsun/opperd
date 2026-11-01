@@ -12,9 +12,6 @@ import {
 const DialogTermsAndConditionDemo = () => {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='outline'>Terms & Condition</Button>
-      </DialogTrigger>
       <DialogContent className='gap-0 p-0 sm:max-h-[min(600px,80vh)] sm:max-w-md'>
         <DialogHeader className='contents space-y-0 text-left'>
           <DialogTitle className='border-b px-6 py-4'>Terms and Condition</DialogTitle>
@@ -51,14 +48,6 @@ const DialogTermsAndConditionDemo = () => {
               </a>
             </p>
           </div>
-          <DialogFooter className='m-0 px-6 sm:justify-end'>
-            <DialogClose asChild>
-              <Button variant='outline'>Cancel</Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button type='button'>I Agree</Button>
-            </DialogClose>
-          </DialogFooter>
         </DialogHeader>
       </DialogContent>
     </Dialog>

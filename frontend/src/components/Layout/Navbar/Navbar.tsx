@@ -8,6 +8,7 @@ import {
     Menu,
     X,
     LogOut,
+    User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,19 +20,21 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer";
 import Link from "next/link";
-import { CartDropdown } from "./AddToCard";
 import NotificationDropdown from "./Notification";
 import Theme from "@/components/provider/Theme";
 import { useLocation } from "@/hooks/useLocation";
 import Category from "../global/Category";
 import SellProduct from "./SellProduct";
+import { useUser } from "@/hooks/useUser";
+import UserMenu from "@/components/modules/user/User";
+import { CartDrawer } from "./AddToCard";
 
 export default function Navbar() {
     const { location } = useLocation();
     const [query, setQuery] = useState("");
     const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-    const user = false;
+    const { user, loading } = useUser();
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-zinc-200 bg-white transition-colors dark:border-zinc-800 dark:bg-gray-900">
@@ -42,7 +45,7 @@ export default function Navbar() {
                         href="/"
                         className="shrink-0 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
                     >
-                        Opperd<span className="text-blue-600">Ecom.</span>
+                        Opperd/<span className="text-blue-600">ecom.</span>
                     </Link>
 
                     {/* Desktop and tablet search */}
@@ -58,7 +61,7 @@ export default function Navbar() {
                             <div className="pr-1">
                                 <Button
                                     size="sm"
-                                    className="h-8 cursor-pointer bg-blue-600 px-3 text-white hover:bg-blue-700"
+                                    className="h-8 cursor-pointer bg-blue-500 px-3 text-white hover:bg-blue-500/90"
                                 >
                                     <Search size={15} />
                                 </Button>
@@ -79,16 +82,23 @@ export default function Navbar() {
                             </Button>
                         )}
 
-                        <CartDropdown />
+                        <CartDrawer />
                         <NotificationDropdown />
                         <SellProduct />
 
-                        <Link href="/join">
-                            <Button className="flex h-10 cursor-pointer items-center gap-1.5 bg-blue-500 px-3 text-xs text-white hover:bg-blue-500/90 sm:px-4 sm:text-sm">
-                                <UserRoundPlus size={18} />
-                                <span className="hidden lg:inline">Join</span>
+                        {user ? (
+                            <UserMenu />
+                        ) : (
+                            <Button
+                                asChild
+                                className="flex h-10 cursor-pointer items-center gap-1.5 bg-blue-500 px-3 text-xs text-white hover:bg-blue-500/90 sm:px-4 sm:text-sm"
+                            >
+                                <Link href="/join">
+                                    <UserRoundPlus size={18} />
+                                    <span className="hidden lg:inline">Join</span>
+                                </Link>
                             </Button>
-                        </Link>
+                        )}
 
                         <Theme />
                     </div>
@@ -107,7 +117,7 @@ export default function Navbar() {
                         </Button>
 
                         <div className="flex shrink-0 items-center [&_button]:!h-9 [&_button]:!w-9 [&_button]:!p-0">
-                            <CartDropdown />
+                            <CartDrawer />
                         </div>
 
                         <div className="flex shrink-0 items-center [&_button]:!h-9 [&_button]:!w-9 [&_button]:!p-0">
@@ -170,13 +180,17 @@ export default function Navbar() {
                                     <div className="border-t border-zinc-200 pt-4 dark:border-zinc-800">
                                         {
                                             user ?
-                                                <Button className="bg-red-500 hover:bg-red-500/90 text-white h-11 text-sm px-32 cursor-pointer flex items-center gap-1.5 font-medium">
-                                                    <LogOut size={18} />
-                                                    Logout
+                                                <Button
+                                                    variant="default"
+                                                    className="flex h-10 cursor-pointer items-center gap-1.5 bg-red-500 px-3 text-xs text-white hover:bg-red-500/90 sm:px-4 sm:text-sm"
+                                                    onClick={() => {
+
+                                                    }}
+                                                ><LogOut size={18} /> Logout
                                                 </Button>
                                                 :
                                                 <Link href="/join">
-                                                    <Button className="bg-blue-500 hover:bg-blue-500/90 text-white h-11 text-sm px-[138px] cursor-pointer flex items-center gap-1.5 font-medium">
+                                                    <Button className="bg-blue-500 hover:bg-blue-500/90 text-white h-10 w-full text-sm px-4 cursor-pointer flex items-center gap-1.5 font-medium">
                                                         <UserRoundPlus size={18} />
                                                         Join
                                                     </Button>
@@ -192,36 +206,66 @@ export default function Navbar() {
 
             {/* Mobile search popup */}
             {isSearchOpen && (
-                <div className="fixed inset-0 z-60 md:hidden">
+                <div className="fixed inset-0 z-60 md:hidden flex flex-col items-center px-4 pt-24 bg-black/40 backdrop-blur-sm">
+                    {/* Background click to close */}
                     <button
                         type="button"
                         aria-label="Close search"
                         onClick={() => setIsSearchOpen(false)}
-                        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                        className="absolute inset-0 -z-10"
                     />
-                    <div className="relative z-10 border-b border-zinc-200 bg-white/95 shadow-lg backdrop-blur-xl dark:border-zinc-800 dark:bg-gray-900/95">
-                        <div className="mx-auto flex max-w-3xl items-center gap-2">
-                            <div className="flex h-11 min-w-0 flex-1 items-center overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
-                                <Search className="ml-3 shrink-0 text-zinc-400" size={18} />
-                                <input
-                                    autoFocus
-                                    type="text"
-                                    value={query}
-                                    onChange={(e) => setQuery(e.target.value)}
-                                    placeholder="What service are you looking for?"
-                                    className="h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-100"
-                                />
-                            </div>
+
+                    {/* Search Box */}
+                    <div className="fixed inset-0 z-60 md:hidden flex flex-col items-center px-4 pt-24 bg-black/40 backdrop-blur-md">
+                        {/* Background click to close */}
+                        <button
+                            type="button"
+                            aria-label="Close search"
+                            onClick={() => setIsSearchOpen(false)}
+                            className="absolute inset-0 -z-10"
+                        />
+
+                        {/* Search Box Container */}
+                        <div className="relative z-10 w-full max-w-lg rounded-2xl border border-zinc-200 bg-white/95 p-3 shadow-2xl dark:border-zinc-800 dark:bg-gray-900/95 backdrop-blur-xl">
+
+                            {/* Close Button on Top Corner */}
                             <Button
                                 type="button"
                                 variant="ghost"
                                 size="icon"
                                 aria-label="Close search"
                                 onClick={() => setIsSearchOpen(false)}
-                                className="h-10 w-10 shrink-0"
+                                className="absolute -top-12 right-0 h-10 w-10 shrink-0 rounded-full bg-red-500 dark:bg-zinc-800 text-zinc-100 dark:text-zinc-200 shadow-md hover:bg-red-600 dark:hover:bg-zinc-700"
                             >
-                                <X size={21} />
+                                <X size={20} />
                             </Button>
+
+                            {/* Input and Search Button */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex h-12 min-w-0 flex-1 items-center overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
+                                    <Search className="ml-3.5 shrink-0 text-zinc-400" size={18} />
+                                    <input
+                                        autoFocus
+                                        type="text"
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                        placeholder="What service are you looking for?"
+                                        className="h-full min-w-0 flex-1 bg-transparent px-3 text-sm text-zinc-900 outline-none placeholder:text-zinc-400 dark:text-zinc-100"
+                                    />
+                                </div>
+                                <Button
+                                    type="button"
+                                    variant="default"
+                                    size="icon"
+                                    aria-label="Search"
+                                    onClick={() => {
+                                        // আপনার সার্চ সাবমিট লজিক এখানে দিতে পারেন
+                                    }}
+                                    className="h-12 w-12 shrink-0 rounded-xl bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                                >
+                                    <Search size={20} />
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </div>

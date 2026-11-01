@@ -16,6 +16,8 @@ import {
 import { AppError } from "../../shared/errors/appError";
 import { UserStatus } from "@prisma/client";
 
+import { Request } from "express";
+
 const buildTokenPayload = (user: {
   id: string;
   role: string;
@@ -454,6 +456,30 @@ const socialLoginSuccess = async (session: ISocialLoginSession) => {
   return { accessToken, refreshToken };
 };
 
+const getUserSession = async (req: Request) => {
+  const token =
+    req.cookies?.["better-auth.session_token"] ||
+    req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return null;
+  }
+
+  const session = await prisma.session.findFirst({
+    where: {
+      token: token,
+      expiresAt: {
+        gt: new Date(),
+      },
+    },
+    include: {
+      user: true,
+    },
+  });
+
+  return session;
+};
+
 export const authService = {
   registerUser,
   loginUser,
@@ -467,4 +493,5 @@ export const authService = {
   forgetPassword,
   resetPassword,
   socialLoginSuccess,
+  getUserSession
 };

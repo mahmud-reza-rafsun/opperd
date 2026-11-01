@@ -6,6 +6,7 @@ import Navbar from "@/components/Layout/Navbar/Navbar";
 import GoogleProvider from "@/components/provider/GoogleProvider";
 import AppToaster from "@/components/provider/app-toaster";
 import { ThemeProvider } from "@/components/provider/ThemeProvider";
+import Footer from "@/components/Layout/Footer/Footer";
 
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <Navbar />
             {children}
             <AppToaster />
+            <Footer />
           </GoogleProvider>
         </ThemeProvider>
       </body>

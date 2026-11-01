@@ -235,7 +235,7 @@ const LoginForm: React.FC = () => {
                                 variant={"default"}
                                 type="submit"
                                 disabled={isLoading}
-                                className="inline-flex h-10 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium text-white transition hover:brightness-110 active:scale-95 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/40 focus-visible:ring-offset-2 ring-offset-white bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-950 dark:ring-1 dark:ring-white/20 dark:ring-offset-neutral-950 dark:focus-visible:ring-white/60 shadow-xs dark:shadow-none"
+                                className="inline-flex h-10 w-full cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm text-white bg-blue-500 hover:bg-blue-500/90 font-semibold"
                             >
                                 {isLoading ? "Signing In..." : "Sign In"}
                             </Button>
