@@ -241,8 +241,7 @@ export const authService = {
     getMe: async function () {
         try {
             const cookieStore = await cookies();
-
-            const response = await fetch(`${AUTH_URL}/api/v1/auth/session`, {
+            const response = await fetch(`${AUTH_URL}/api/v1/auth/me`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -260,7 +259,6 @@ export const authService = {
             }
 
             const data = await response.json();
-            console.log(data);
             return { data, error: null };
         } catch (error: any) {
             return { data: null, error: error?.message || "Something went wrong" };

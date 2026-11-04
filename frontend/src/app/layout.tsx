@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Google_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/Layout/Navbar/Navbar";
 import GoogleProvider from "@/components/provider/GoogleProvider";
 import AppToaster from "@/components/provider/app-toaster";
 import { ThemeProvider } from "@/components/provider/ThemeProvider";
-import Footer from "@/components/Layout/Footer/Footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
@@ -28,13 +27,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
-        >
+          disableTransitionOnChange>
           <GoogleProvider>
-            <Navbar />
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
             <AppToaster />
-            <Footer />
           </GoogleProvider>
         </ThemeProvider>
       </body>

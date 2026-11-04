@@ -8,7 +8,7 @@ export default function AppToaster() {
 
     return (
         <Toaster
-            position="top-right"
+            position="bottom-right"
             theme={resolvedTheme as "light" | "dark"}
             richColors
         />

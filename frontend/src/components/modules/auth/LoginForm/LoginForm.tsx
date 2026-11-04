@@ -1,13 +1,14 @@
 'use client'
-import { CredentialResponse, useGoogleLogin } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toast } from 'sonner';
 import { LoginAction } from '../actions/LoginAction';
 import { googleLoginAction } from '../actions/GoogleLoginAction';
 import { Button } from '@/components/ui/button';
 import { GoogleIcon } from '../JoinForm/JoinForm';
+import BackToHome from '../BackToHome/BackToHome';
 
 const MailIcon: React.FC = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -94,7 +95,21 @@ const LoginForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const router = useRouter();
     const cardRef = useRef<HTMLDivElement>(null);
+    const googleBtnWrapRef = useRef<HTMLDivElement>(null);
+    const [googleWidth, setGoogleWidth] = useState<number>(0);
     const [googleError, setGoogleError] = useState<string>('');
+
+    useEffect(() => {
+        const el = googleBtnWrapRef.current;
+        if (!el) return;
+
+        const updateWidth = () =>
+            setGoogleWidth(Math.min(Math.floor(el.offsetWidth), 400));
+
+        updateWidth();
+        window.addEventListener('resize', updateWidth);
+        return () => window.removeEventListener('resize', updateWidth);
+    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -121,14 +136,18 @@ const LoginForm: React.FC = () => {
         }
     };
 
-    const handleGoogleSuccess = async (credentialResponse: CredentialResponse | any) => {
+    useEffect(() => {
+        if (googleBtnWrapRef.current) {
+            setGoogleWidth(googleBtnWrapRef.current.clientWidth);
+        }
+    }, []);
+
+    const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
         setGoogleError('');
-        // @react-oauth/google useGoogleLogin flow sometimes returns code or credential depending on flow type.
-        // For token response (implicit flow) it returns access_token. Let's handle credential/access_token securely.
-        const idToken = credentialResponse.credential || credentialResponse.access_token;
+        const idToken = credentialResponse.credential;
 
         if (!idToken) {
-            setGoogleError('Google token not found');
+            setGoogleError('Google idToken not found');
             return;
         }
 
@@ -148,14 +167,10 @@ const LoginForm: React.FC = () => {
         }
     };
 
-    const googleLogin = useGoogleLogin({
-        onSuccess: handleGoogleSuccess,
-        onError: () => setGoogleError("Google login failed"),
-    });
-
     return (
         <>
             <div className="fixed inset-0 z-40 flex overflow-y-auto p-6 pt-24 bg-white dark:bg-neutral-950 scrollbar-none [&::-webkit-scrollbar]:hidden">
+                <BackToHome />
                 <div className="w-full max-w-sm relative m-auto">
                     <div
                         ref={cardRef}
@@ -171,16 +186,37 @@ const LoginForm: React.FC = () => {
                         </div>
 
                         <div className="w-full flex flex-col items-center">
-                            <Button
-                                variant={"outline"}
-                                type="button"
-                                onClick={() => googleLogin()}
-                                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white dark:ring-offset-neutral-950 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/30 dark:focus-visible:ring-white/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-neutral-200 bg-white text-neutral-900 cursor-pointer hover:bg-neutral-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 h-10 px-4 py-2 w-full"
+                            <div
+                                ref={googleBtnWrapRef}
+                                className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white dark:ring-offset-neutral-950 transition-colors border border-neutral-200 bg-white text-neutral-900 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 h-10 px-4 w-full overflow-hidden"
                             >
-                                <GoogleIcon />
-                                <span className="ml-2">Continue with Google</span>
-                            </Button>
+                                {/* কাস্টম UI: লোগো একদম বামে এবং টেক্সট মাঝখানে */}
+                                <div className="w-full grid grid-cols-[auto_1fr_auto] items-center pointer-events-none px-14">
+                                    <svg className="w-4 h-4" viewBox="0 0 24 24">
+                                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                                    </svg>
+                                    <span className="text-center">Continue with Google</span>
+                                    <span></span> {/* ব্যালেন্স ঠিক রাখার জন্য খালি স্প্যান */}
+                                </div>
 
+                                {/* ওপরে গুগলের অদৃশ্য আসল আইফ্রেমটি থাকবে, যা দিয়ে ক্লিক হ্যান্ডেল হবে */}
+                                {googleWidth > 0 && (
+                                    <div className="absolute inset-0 opacity-0 cursor-pointer flex justify-center">
+                                        <GoogleLogin
+                                            onSuccess={handleGoogleSuccess}
+                                            onError={() => setGoogleError("Google login failed")}
+                                            theme="outline"
+                                            size="large"
+                                            width={googleWidth}
+                                            text="continue_with"
+                                            shape="rectangular"
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             {googleError && (
                                 <p className="mt-2 text-center text-xs text-red-500">{googleError}</p>
                             )}
@@ -254,7 +290,7 @@ const LoginForm: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 };

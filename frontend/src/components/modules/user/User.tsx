@@ -23,7 +23,7 @@ import { LogoutAction } from '../auth/actions/LogoutAction';
 export default function UserSession() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const { user, loading } = useUser() as { user: User | null; loading: boolean };
-
+    console.log(user);
     const handleLogout = async () => {
         setIsLoggingOut(true);
         const toastId = toast.loading("Logging out...");
@@ -57,9 +57,9 @@ export default function UserSession() {
         <div className="flex items-center">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="relative h-11 w-11 border-blue-500 cursor-pointer rounded-full transition-all active:scale-95">
+                    <Button variant="outline" className="relative h-10 w-10 cursor-pointer rounded-full transition-all ">
                         <Avatar className="h-10 w-10">
-                            <AvatarImage className='object-cover' src={user.avatarUrl || user.image} alt={user.name} />
+                            <AvatarImage className='object-cover' src={user.image} alt={user.name} />
                             <AvatarFallback className="bg-blue-500 text-white">
                                 {user.name?.charAt(0).toUpperCase() || "U"}
                             </AvatarFallback>

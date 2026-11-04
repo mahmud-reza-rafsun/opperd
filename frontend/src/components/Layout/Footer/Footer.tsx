@@ -264,8 +264,6 @@ export default function Footer() {
                     </div>
                 </div>
 
-
-
                 {/* Legal Policy Modal */}
                 <LegalModal
                     isOpen={isModalOpen}
@@ -274,7 +272,7 @@ export default function Footer() {
                 />
             </footer>
             <div className="border-t border-zinc-300 dark:border-zinc-800 py-1.5 text-center text-sm text-muted-foreground">
-                <p>© {new Date().getFullYear()} Opperd/ecom. All rights reserved.</p>
+                <p>© 2026 Opperd/ecom. All rights reserved.</p>
             </div>
         </div>
     );

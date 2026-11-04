@@ -28,6 +28,7 @@ import SellProduct from "./SellProduct";
 import { useUser } from "@/hooks/useUser";
 import UserMenu from "@/components/modules/user/User";
 import { CartDrawer } from "./AddToCard";
+import Image from "next/image";
 
 export default function Navbar() {
     const { location } = useLocation();
@@ -41,11 +42,15 @@ export default function Navbar() {
             <div className="container mx-auto px-3 sm:px-4">
                 <div className="flex h-16 items-center justify-between gap-3">
                     {/* Logo */}
-                    <Link
-                        href="/"
-                        className="shrink-0 text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100"
-                    >
-                        Opperd/<span className="text-blue-600">ecom.</span>
+                    <Link href="/" className="flex items-center shrink-0">
+                        <Image
+                            src="/logo.png"
+                            alt="Opperd"
+                            width={76}
+                            height={76}
+                            priority
+                            className=""
+                        />
                     </Link>
 
                     {/* Desktop and tablet search */}
@@ -81,8 +86,8 @@ export default function Navbar() {
                                 <span>{location.country}</span>
                             </Button>
                         )}
-
-                        <CartDrawer />
+                        {/* TODO  */}
+                        {/* <CartDrawer /> */}
                         <NotificationDropdown />
                         <SellProduct />
 
@@ -116,9 +121,10 @@ export default function Navbar() {
                             <Search size={20} />
                         </Button>
 
-                        <div className="flex shrink-0 items-center [&_button]:!h-9 [&_button]:!w-9 [&_button]:!p-0">
+                        {/* Pore */}
+                        {/* <div className="flex shrink-0 items-center [&_button]:!h-9 [&_button]:!w-9 [&_button]:!p-0">
                             <CartDrawer />
-                        </div>
+                        </div> */}
 
                         <div className="flex shrink-0 items-center [&_button]:!h-9 [&_button]:!w-9 [&_button]:!p-0">
                             <NotificationDropdown />

@@ -264,88 +264,26 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const SUPPORTED_PROVIDERS: SocialProvider[] = [
-  "google",
-  "github",
-  "facebook",
-  "twitter",
-  "discord",
-];
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
 
-const socialLogin = catchAsync((req: Request, res: Response) => {
-  const provider = req.params.provider as SocialProvider;
-  const redirectPath = (req.query.redirect as string) || "/dashboard";
+  const result = await authService.googleLogin(payload);
 
-  if (!SUPPORTED_PROVIDERS.includes(provider)) {
-    throw new AppError(
-      status.BAD_REQUEST,
-      `Unsupported social provider: ${provider}`,
-    );
-  }
+  const { accessToken, refreshToken } = result;
 
-  const payload = getSocialAuthPayload(provider, redirectPath);
+  tokenUtils.setAccessTokenCookie(res, accessToken);
+  tokenUtils.setRefreshTokenCookie(res, refreshToken);
 
-  return sendResponse(res, {
+  sendResponse(res, {
     status: status.OK,
     success: true,
-    message: `${provider} login payload generated successfully`,
-    data: payload,
-  });
-});
-
-const socialLoginSuccess = catchAsync(async (req: Request, res: Response) => {
-  const provider = req.params.provider || "google";
-  const redirectPath = (req.query.redirect as string) || "/dashboard";
-  const isValidRedirectPath =
-    redirectPath.startsWith("/") && !redirectPath.startsWith("//");
-  const finalRedirectPath = isValidRedirectPath ? redirectPath : "/dashboard";
-
-  const sessionToken = req.cookies["better-auth.session_token"];
-
-  if (!sessionToken) {
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`);
-  }
-
-  const session = await auth.api.getSession({
-    headers: {
-      Cookie: `better-auth.session_token=${sessionToken}`,
+    message: "Google login successful",
+    data: {
+      accessToken,
+      refreshToken,
     },
   });
-
-  if (!session?.user) {
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=oauth_failed`);
-  }
-
-  let accessToken: string;
-  let refreshToken: string;
-
-  try {
-    const result = await authService.socialLoginSuccess(session);
-    accessToken = result.accessToken;
-    refreshToken = result.refreshToken;
-  } catch (error) {
-    const message =
-      error instanceof AppError
-        ? encodeURIComponent(error?.message)
-        : "oauth_failed";
-    return res.redirect(`${envVars.FRONTEND_URL}/login?error=${message}`);
-  }
-
-  const callbackUrl = new URL(
-    `${envVars.FRONTEND_URL}/api/auth/callback/${provider}`,
-  );
-  callbackUrl.searchParams.set("accessToken", accessToken);
-  callbackUrl.searchParams.set("refreshToken", refreshToken);
-  callbackUrl.searchParams.set("token", sessionToken);
-  callbackUrl.searchParams.set("redirect", finalRedirectPath);
-
-  res.redirect(callbackUrl.toString());
 });
-
-const handleOAuthError = catchAsync((req: Request, res: Response) => {
-  const error = req.query.error as string || "oauth_failed";
-  res.redirect(`${envVars.FRONTEND_URL}/login?error=${error}`);
-})
 
 const getUserSession = catchAsync(
   async (req: Request, res: Response) => {
@@ -375,9 +313,7 @@ export const authController = {
   verifyEmail,
   resendOTP,
   forgetPassword,
+  googleLogin,
   resetPassword,
-  socialLogin,
-  socialLoginSuccess,
-  handleOAuthError,
   getUserSession
 };

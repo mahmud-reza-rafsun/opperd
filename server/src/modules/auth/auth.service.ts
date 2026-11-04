@@ -10,13 +10,17 @@ import {
   ILoginUserPayload,
   IRegisterUserPayload,
   IRequestUser,
-  ISocialLoginSession,
   type NeedsVerification,
 } from "../../types/auth.type";
 import { AppError } from "../../shared/errors/appError";
-import { UserStatus } from "@prisma/client";
-
+import { AuthProvider, Role, UserStatus } from "@prisma/client";
 import { Request } from "express";
+import path from "path";
+import ejs from "ejs";
+import { transporter } from "../../lib/transporter";
+import { TokenPayload } from "google-auth-library";
+import { googleClient } from "../../lib/googleAuth";
+import { IGoogleLoginPayload } from "../../interface/auth.interface";
 
 const buildTokenPayload = (user: {
   id: string;
@@ -429,31 +433,135 @@ const resetPassword = async (email: string, otp: string, newPassword: string) =>
   });
 }
 
-const socialLoginSuccess = async (session: ISocialLoginSession) => {
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-  });
+const googleLogin = async (payload: IGoogleLoginPayload) => {
+  let googleIdTokenPayload: TokenPayload | null | undefined = null;
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: payload.idToken,
+      audience: envVars.GOOGLE_CLIENT_ID,
+    });
 
-  if (!user) {
+    googleIdTokenPayload = ticket.getPayload();
+  } catch (error) {
     throw new AppError(
-      status.NOT_FOUND,
-      "User not found after social login. Please try again.",
+      status.UNAUTHORIZED,
+      "Invalid Or Expired Google Id Token",
     );
   }
 
-  if (user.status === "BLOCKED") {
-    throw new AppError(status.FORBIDDEN, "Your account has been blocked.");
+  if (!googleIdTokenPayload) {
+    throw new AppError(
+      status.UNAUTHORIZED,
+      "Invalid Or Expired Google Id Token",
+    );
+  }
+
+  if (!googleIdTokenPayload.email) {
+    throw new AppError(status.BAD_REQUEST, "Google Email Not Found");
+  }
+  if (!googleIdTokenPayload.name) {
+    throw new AppError(status.BAD_REQUEST, "Google Email User Name Not Found");
+  }
+
+  const ifUserExistWithGoogleAuth = await prisma.user.findUnique({
+    where: {
+      email: googleIdTokenPayload.email,
+      role: Role.CUSTOMER,
+      googleId: googleIdTokenPayload.sub,
+    },
+  });
+
+  let user = ifUserExistWithGoogleAuth;
+
+  if (!ifUserExistWithGoogleAuth) {
+    const ifUserExistWithCredentials = await prisma.user.findUnique({
+      where: {
+        email: googleIdTokenPayload.email,
+        role: Role.CUSTOMER,
+        authProvider: AuthProvider.CREDENTIAL,
+      },
+    });
+
+    if (ifUserExistWithCredentials) {
+      if (!ifUserExistWithCredentials.emailVerified) {
+        throw new AppError(status.FORBIDDEN, "Email Not Verified");
+      }
+
+      if (ifUserExistWithCredentials.status === UserStatus.BLOCKED) {
+        throw new AppError(status.FORBIDDEN, "User Is Blocked");
+      }
+
+      if (
+        ifUserExistWithCredentials.isDeleted ||
+        ifUserExistWithCredentials.status === UserStatus.DELETED
+      ) {
+        throw new AppError(status.FORBIDDEN, "User Is Deleted");
+      }
+
+      user = await prisma.user.update({
+        where: { id: ifUserExistWithCredentials.id },
+        data: { googleId: googleIdTokenPayload.sub },
+      });
+    } else {
+      // Google Register
+      user = await prisma.user.create({
+        data: {
+          name: googleIdTokenPayload.name,
+          email: googleIdTokenPayload.email,
+          image: googleIdTokenPayload.picture || "",
+          role: Role.CUSTOMER,
+          googleId: googleIdTokenPayload.sub,
+          authProvider: AuthProvider.GOOGLE,
+          emailVerified: true,
+        },
+      });
+
+      // Welcome email fail korle login jeno 500 na dey
+      const newUser = user;
+      (async () => {
+        try {
+          const templatePath = path.join(
+            process.cwd(),
+            "src/app/templates/user-welcome-email.ejs",
+          );
+          const html = await ejs.renderFile(templatePath, {
+            name: newUser.name,
+          });
+
+          await transporter.sendMail({
+            from: envVars.EMAIL_SENDER.SMTP_FROM,
+            to: newUser.email,
+            subject: "Welcome To Opperd/ecom",
+            html,
+          });
+        } catch (err) {
+          console.error("Welcome email failed", err);
+        }
+      })();
+    }
+  }
+
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User Not Found");
+  }
+
+  if (user.status === UserStatus.BLOCKED) {
+    throw new AppError(status.FORBIDDEN, "User Is Blocked");
   }
 
   if (user.isDeleted || user.status === UserStatus.DELETED) {
-    throw new AppError(status.FORBIDDEN, "Your account has been deleted.");
+    throw new AppError(status.FORBIDDEN, "User Is Deleted");
   }
 
-  const payload = buildTokenPayload(user);
-  const accessToken = tokenUtils.getAccessToken(payload);
-  const refreshToken = tokenUtils.getRefreshToken(payload);
+  const tokenPayload = buildTokenPayload(user);
+  const accessToken = tokenUtils.getAccessToken(tokenPayload);
+  const refreshToken = tokenUtils.getRefreshToken(tokenPayload);
 
-  return { accessToken, refreshToken };
+  return {
+    accessToken,
+    refreshToken,
+    token: undefined as string | undefined,
+  };
 };
 
 const getUserSession = async (req: Request) => {
@@ -492,6 +600,6 @@ export const authService = {
   resendOTP,
   forgetPassword,
   resetPassword,
-  socialLoginSuccess,
+  googleLogin,
   getUserSession
 };

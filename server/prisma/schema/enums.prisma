@@ -1,30 +1,30 @@
 enum Role {
-    SUPER_ADMIN
-    CX_ADMIN
-    CUSTOMER
+  SUPER_ADMIN
+  CX_ADMIN
+  CUSTOMER
 }
 
 enum UserStatus {
-    ACTIVE
-    BLOCKED
-    DELETED
+  ACTIVE
+  BLOCKED
+  DELETED
 }
 
 enum ProductStatus {
-    DRAFT
-    ACTIVE
-    SOLD
-    RESERVED
-    EXPIRED
-    BANNED
+  DRAFT
+  ACTIVE
+  SOLD
+  RESERVED
+  EXPIRED
+  BANNED
 }
 
 enum ProductCondition {
-    NEW
-    LIKE_NEW
-    GOOD
-    FAIR
-    FOR_PARTS
+  NEW
+  LIKE_NEW
+  GOOD
+  FAIR
+  FOR_PARTS
 }
 
 enum ListingType {
@@ -43,18 +43,18 @@ enum ReportReason {
 }
 
 enum Currency {
-  BDT  // Bangladeshi Taka
-  USD  // US Dollar
-  GBP  // British Pound
-  EUR  // Euro
-  AED  // UAE Dirham
-  SAR  // Saudi Riyal
-  QAR  // Qatari Riyal
-  KWD  // Kuwaiti Dinar
-  BHD  // Bahraini Dinar
-  OMR  // Omani Rial
-  CAD  // Canadian Dollar
-  AUD  // Australian Dollar
+  BDT // Bangladeshi Taka
+  USD // US Dollar
+  GBP // British Pound
+  EUR // Euro
+  AED // UAE Dirham
+  SAR // Saudi Riyal
+  QAR // Qatari Riyal
+  KWD // Kuwaiti Dinar
+  BHD // Bahraini Dinar
+  OMR // Omani Rial
+  CAD // Canadian Dollar
+  AUD // Australian Dollar
 }
 
 enum DashboardPeriod {
@@ -84,4 +84,9 @@ enum PaymentType {
   PRODUCT_PURCHASE
   FEATURED_BOOST
   SUBSCRIPTION
+}
+
+enum AuthProvider {
+  GOOGLE
+  CREDENTIAL
 }
