@@ -7,8 +7,6 @@ import { toast } from 'sonner';
 import { LoginAction } from '../actions/LoginAction';
 import { googleLoginAction } from '../actions/GoogleLoginAction';
 import { Button } from '@/components/ui/button';
-import { GoogleIcon } from '../JoinForm/JoinForm';
-import BackToHome from '../BackToHome/BackToHome';
 
 const MailIcon: React.FC = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -170,7 +168,6 @@ const LoginForm: React.FC = () => {
     return (
         <>
             <div className="fixed inset-0 z-40 flex overflow-y-auto p-6 pt-24 bg-white dark:bg-neutral-950 scrollbar-none [&::-webkit-scrollbar]:hidden">
-                <BackToHome />
                 <div className="w-full max-w-sm relative m-auto">
                     <div
                         ref={cardRef}
@@ -188,9 +185,7 @@ const LoginForm: React.FC = () => {
                         <div className="w-full flex flex-col items-center">
                             <div
                                 ref={googleBtnWrapRef}
-                                className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white dark:ring-offset-neutral-950 transition-colors border border-neutral-200 bg-white text-neutral-900 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 h-10 px-4 w-full overflow-hidden"
-                            >
-                                {/* কাস্টম UI: লোগো একদম বামে এবং টেক্সট মাঝখানে */}
+                                className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-white dark:ring-offset-neutral-950 transition-colors border border-neutral-200 bg-white text-neutral-900 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 h-10 px-4 w-full overflow-hidden">
                                 <div className="w-full grid grid-cols-[auto_1fr_auto] items-center pointer-events-none px-14">
                                     <svg className="w-4 h-4" viewBox="0 0 24 24">
                                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -199,10 +194,9 @@ const LoginForm: React.FC = () => {
                                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
                                     </svg>
                                     <span className="text-center">Continue with Google</span>
-                                    <span></span> {/* ব্যালেন্স ঠিক রাখার জন্য খালি স্প্যান */}
+                                    <span></span>
                                 </div>
 
-                                {/* ওপরে গুগলের অদৃশ্য আসল আইফ্রেমটি থাকবে, যা দিয়ে ক্লিক হ্যান্ডেল হবে */}
                                 {googleWidth > 0 && (
                                     <div className="absolute inset-0 opacity-0 cursor-pointer flex justify-center">
                                         <GoogleLogin

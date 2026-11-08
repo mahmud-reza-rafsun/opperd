@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
     SidebarProvider,
     SidebarInset,
@@ -5,10 +6,10 @@ import {
 
 import DashboardSidebar from "./_components/Sidebar/Sidebar";
 import DashboardNavbar from "./_components/Navbar/DashboardNavbar";
-import { authService } from "@/service/auth.service";
 import { Roles } from "@/constants/role";
+import { userService } from "@/service/user.service";
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
     superAdmin,
     cxAdmin,
     customer
@@ -17,7 +18,27 @@ export default async function DashboardLayout({
     cxAdmin: React.ReactNode;
     customer: React.ReactNode;
 }) {
-    const session = await authService.getMe();
+    return (
+        <Suspense fallback={null}>
+            <DashboardContent
+                superAdmin={superAdmin}
+                cxAdmin={cxAdmin}
+                customer={customer}
+            />
+        </Suspense>
+    );
+}
+
+async function DashboardContent({
+    superAdmin,
+    cxAdmin,
+    customer
+}: {
+    superAdmin: React.ReactNode;
+    cxAdmin: React.ReactNode;
+    customer: React.ReactNode;
+}) {
+    const session = await userService.getMe();
     const userRole = session?.data?.data?.role;
 
     return (

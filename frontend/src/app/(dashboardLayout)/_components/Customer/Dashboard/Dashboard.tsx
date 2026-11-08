@@ -1,4 +1,4 @@
-import React from 'react';
+"use client";
 import { ShoppingBag, Clock, CheckCircle2, Package } from 'lucide-react';
 import BarChart from '@/components/charts/bar-chart';
 import Grid from '@/components/charts/grid';

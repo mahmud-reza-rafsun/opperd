@@ -38,6 +38,9 @@ app.get("/", (_req: Request, res: Response) => {
   });
 });
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api/v1", apiRoutes);
 
 app.use(notFound);

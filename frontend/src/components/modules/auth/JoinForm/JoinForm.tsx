@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 import { RegisterAction } from '../actions/RegisterAction';
 import { ResendOtpAction, VerifyOtpAction } from '../actions/OtpActions';
 import { Button } from '@/components/ui/button';
-import BackToHome from '../BackToHome/BackToHome';
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 60;
@@ -108,7 +107,7 @@ const FloatingLabelInput: React.FC<{
     );
 };
 
-const RegisterForm: React.FC = () => {
+const JoinForm: React.FC = () => {
     const router = useRouter();
 
     const [step, setStep] = useState<'register' | 'otp'>('register');
@@ -268,7 +267,6 @@ const RegisterForm: React.FC = () => {
                     to { opacity: 1; transform: translateX(0); }
                 }
             `}</style>
-            <BackToHome />
             <div className="w-full max-w-sm relative m-auto">
                 <div
                     ref={cardRef}
@@ -445,4 +443,4 @@ const RegisterForm: React.FC = () => {
     );
 };
 
-export default RegisterForm;
+export default JoinForm;

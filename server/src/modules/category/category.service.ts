@@ -1,10 +1,11 @@
 import { prisma } from "../../database/prisma";
-import { ICreateCategory, IUpdateCategory } from "../../interface/category.interface";
+import { ICreateCategory } from "../../interface/category.interface";
 
 
 const createCategory = async (payload: ICreateCategory) => {
+    const { name, slug, image } = payload;
     const data = await prisma.category.create({
-        data: payload,
+        data: { name, slug, image } as any,
     });
     return data;
 };
@@ -37,7 +38,7 @@ const getCategoryById = async (id: string) => {
 };
 
 const getCategoryBySlug = async (slug: string) => {
-    const data = await prisma.category.findUnique({
+    const data = await prisma.category.findFirst({
         where: { slug },
         include: {
             parent: { select: { id: true, name: true, slug: true } },
@@ -47,10 +48,11 @@ const getCategoryBySlug = async (slug: string) => {
     return data;
 };
 
-const updateCategory = async (id: string, payload: IUpdateCategory) => {
+const updateCategory = async (id: string, payload: ICreateCategory) => {
+    const { name, slug, image } = payload;
     const data = await prisma.category.update({
         where: { id },
-        data: payload,
+        data: { name, slug, image },
     });
     return data;
 };

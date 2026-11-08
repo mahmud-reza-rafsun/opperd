@@ -1,0 +1,230 @@
+[
+  {
+    "productTitle": "Wireless Mechanical Keyboard",
+    "description": "RGB backlit mechanical gaming keyboard with hot-swappable switches and long battery life.",
+    "categoryId": "1a3d4e5f-6a7b-8c9d-0e1f-2a3b4c5d6e7f",
+    "thumbnail": "https://images.unsplash.com/photo-1547394765-185e1e68f34e",
+    "images": "https://images.unsplash.com/photo-1547394765-185e1e68f34e?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "gaming",
+      "keyboard",
+      "wireless",
+      "rgb"
+    ],
+    "price": 120.50,
+    "location": "Berlin",
+    "currency": "EUR",
+    "productCondition": "GOOD",
+    "listingType": "SELL",
+    "deliveryDays": 3
+  },
+  {
+    "productTitle": "Sony WH-1000XM5 Noise Cancelling Headphones",
+    "description": "Industry-leading noise cancellation headphones with 30-hour battery life, multipoint connection, and premium sound quality.",
+    "categoryId": "7a9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f",
+    "thumbnail": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
+    "images": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "sony",
+      "headphones",
+      "noise-cancelling",
+      "audio"
+    ],
+    "price": 299.99,
+    "location": "Amsterdam",
+    "currency": "EUR",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 2
+  },
+  {
+    "productTitle": "Apple MacBook Pro 14-inch M3",
+    "description": "Powerful laptop with Apple M3 chip, 16GB RAM, 512GB SSD. Perfect for developers and creative professionals.",
+    "categoryId": "2b4e5f6a-7b8c-9d0e-1f2a-3b4c5d6e7f8a",
+    "thumbnail": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8",
+    "images": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "apple",
+      "macbook",
+      "laptop",
+      "m3"
+    ],
+    "price": 1999.00,
+    "location": "London",
+    "currency": "GBP",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 1
+  },
+  {
+    "productTitle": "Nike Air Max 270 Running Shoes",
+    "description": "Lightweight and breathable running shoes with Max Air cushioning. Available in multiple colorways. Size 42 EU.",
+    "categoryId": "e7b1a2c3-4d5e-6f7a-8b9c-0d1e2f3a4b5c",
+    "thumbnail": "https://images.unsplash.com/photo-1542291026-7eec264c27ff",
+    "images": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "nike",
+      "shoes",
+      "running",
+      "sports"
+    ],
+    "price": 89.99,
+    "location": "Paris",
+    "currency": "EUR",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 4
+  },
+  {
+    "productTitle": "Vintage Leather Messenger Bag",
+    "description": "Genuine full-grain leather messenger bag with laptop compartment up to 15 inches. Handcrafted with antique brass hardware.",
+    "categoryId": "3c5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b",
+    "thumbnail": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa",
+    "images": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "bag",
+      "leather",
+      "vintage",
+      "messenger"
+    ],
+    "price": 149.00,
+    "location": "Florence",
+    "currency": "EUR",
+    "productCondition": "GOOD",
+    "listingType": "SELL",
+    "deliveryDays": 7
+  },
+  {
+    "productTitle": "DJI Mini 4 Pro Drone",
+    "description": "Compact foldable drone with 4K HDR video, omnidirectional obstacle sensing, and 34-min flight time. Perfect for aerial photography.",
+    "categoryId": "5e7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d",
+    "thumbnail": "https://images.unsplash.com/photo-1473968512647-3e447244af8f",
+    "images": "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "dji",
+      "drone",
+      "photography",
+      "4k"
+    ],
+    "price": 759.00,
+    "location": "Munich",
+    "currency": "EUR",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 3
+  },
+  {
+    "productTitle": "Herman Miller Aeron Ergonomic Chair",
+    "description": "Used Herman Miller Aeron chair in excellent condition. PostureFit SL support, adjustable armrests, fully loaded. Size B (Medium).",
+    "categoryId": "f8c2b3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "thumbnail": "https://images.unsplash.com/photo-1580480055273-228ff5388ef8",
+    "images": "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "chair",
+      "office",
+      "ergonomic",
+      "herman-miller"
+    ],
+    "price": 850.00,
+    "location": "Zurich",
+    "currency": "CHF",
+    "productCondition": "LIKE_NEW",
+    "listingType": "SELL",
+    "deliveryDays": 5
+  },
+  {
+    "productTitle": "Canon EOS R6 Mark II Mirrorless Camera",
+    "description": "Full-frame mirrorless camera with 40fps burst shooting, 6K RAW video, and advanced autofocus. Body only.",
+    "categoryId": "5e7b8c9d-0e1f-2a3b-4c5d-6e7f8a9b0c1d",
+    "thumbnail": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32",
+    "images": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "canon",
+      "camera",
+      "mirrorless",
+      "photography"
+    ],
+    "price": 2499.00,
+    "location": "Tokyo",
+    "currency": "USD",
+    "productCondition": "LIKE_NEW",
+    "listingType": "SELL",
+    "deliveryDays": 6
+  },
+  {
+    "productTitle": "Apple Watch Series 9 GPS 45mm",
+    "description": "Latest Apple Watch with S9 chip, Always-On Retina display, crash detection, blood oxygen sensor, and ECG app.",
+    "categoryId": "8b0e1f2a-3b4c-5d6e-7f8a-9b0c1d2e3f4a",
+    "thumbnail": "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
+    "images": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "apple",
+      "watch",
+      "wearable",
+      "smartwatch"
+    ],
+    "price": 429.00,
+    "location": "Copenhagen",
+    "currency": "EUR",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 2
+  },
+  {
+    "productTitle": "Trek Marlin 7 Mountain Bike",
+    "description": "Hardtail mountain bike with RockShox 30 Silver fork, Shimano 1x8 drivetrain, hydraulic disc brakes. Frame size M. Lightly used.",
+    "categoryId": "9c1f2a3b-4c5d-6e7f-8a9b-0c1d2e3f4a5b",
+    "thumbnail": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64",
+    "images": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "bike",
+      "mountain",
+      "trek",
+      "cycling"
+    ],
+    "price": 680.00,
+    "location": "Vienna",
+    "currency": "EUR",
+    "productCondition": "GOOD",
+    "listingType": "SELL",
+    "deliveryDays": 10
+  },
+  {
+    "productTitle": "Samsung 32-inch 4K Curved Monitor",
+    "description": "32-inch VA panel curved monitor with 4K UHD resolution, 144Hz refresh rate, HDR10, and 1ms response time. Ideal for gaming and design.",
+    "categoryId": "4d6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b0c",
+    "thumbnail": "https://images.unsplash.com/photo-1593784991095-a205069470b6",
+    "images": "https://images.unsplash.com/photo-1593784991095-a205069470b6?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "samsung",
+      "monitor",
+      "4k",
+      "gaming"
+    ],
+    "price": 549.00,
+    "location": "Seoul",
+    "currency": "USD",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 4
+  },
+  {
+    "productTitle": "Bose QuietComfort 45 Headphones",
+    "description": "Wireless noise cancelling headphones with high-fidelity audio, 24-hour battery life, and comfortable over-ear design.",
+    "categoryId": "7a9d0e1f-2a3b-4c5d-6e7f-8a9b0c1d2e3f",
+    "thumbnail": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc",
+    "images": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=1170&auto=format&fit=crop",
+    "tags": [
+      "bose",
+      "headphones",
+      "audio",
+      "wireless"
+    ],
+    "price": 249.00,
+    "location": "Stockholm",
+    "currency": "EUR",
+    "productCondition": "NEW",
+    "listingType": "SELL",
+    "deliveryDays": 3
+  }
+]

@@ -1,9 +1,10 @@
 import { authService } from "@/service/auth.service";
+import { userService } from "@/service/user.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const { data, error } = await authService.getMe();
+        const { data, error } = await userService.getMe();
 
         if (error || !data) {
             return NextResponse.json(

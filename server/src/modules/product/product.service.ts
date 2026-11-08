@@ -1,9 +1,13 @@
 import { prisma } from "../../database/prisma";
 import { ICreateProduct, IProductFilter, IUpdateProduct } from "../../interface/product.interface";
 
-const createProduct = async (payload: ICreateProduct) => {
+const createProduct = async (categoryId: string, sellerId: string, payload: ICreateProduct) => {
     const data = await prisma.product.create({
-        data: payload,
+        data: {
+            ...payload,
+            categoryId,
+            sellerId,
+        },
     });
     return data;
 };
@@ -24,24 +28,21 @@ const getAllProducts = async (filter: IProductFilter = {}) => {
 };
 
 const getProductById = async (id: string) => {
-    const data = await prisma.product.findUnique({
-        where: { id, isDeleted: false },
-        include: {
-            seller: { select: { id: true, name: true, email: true } },
-            category: { select: { id: true, name: true } },
-        },
-    });
-    return data;
-};
+    if (!id) {
+        throw new Error("Product ID is required");
+    }
 
-const getProductBySlug = async (slug: string) => {
-    const data = await prisma.product.findUnique({
-        where: { slug, isDeleted: false },
+    const data = await prisma.product.findFirst({
+        where: {
+            id,
+            isDeleted: false,
+        },
         include: {
             seller: { select: { id: true, name: true, email: true } },
             category: { select: { id: true, name: true } },
         },
     });
+
     return data;
 };
 
@@ -65,7 +66,6 @@ export const productService = {
     createProduct,
     getAllProducts,
     getProductById,
-    getProductBySlug,
     updateProduct,
     deleteProduct,
 };

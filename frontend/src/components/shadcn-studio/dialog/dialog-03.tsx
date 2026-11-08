@@ -18,7 +18,7 @@ const AlertDialogDestructiveDemo = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant='outline'>Alert Dialog Destructive</Button>
+        <Button variant='outline'>Alert Dialog Destructive</Button>a
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader className='place-items-center! items-center'>

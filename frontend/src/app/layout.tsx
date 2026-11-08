@@ -6,6 +6,7 @@ import GoogleProvider from "@/components/provider/GoogleProvider";
 import AppToaster from "@/components/provider/app-toaster";
 import { ThemeProvider } from "@/components/provider/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import AuthModal from "@/components/modules/auth/authModal/AuthModal";
 
 const googleSans = Google_Sans({
   variable: "--font-google-sans",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={cn(googleSans.variable)} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

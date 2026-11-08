@@ -9,12 +9,11 @@ const router = Router();
 
 // Public routes
 router.get("/", productController.getAllProducts);
-router.get("/slug/:slug", productController.getProductBySlug);
 router.get("/:id", productController.getProductById);
 
 // Protected routes
 router.post(
-    "/",
+    "/:id",
     checkAuth(Role.SUPER_ADMIN, Role.CX_ADMIN, Role.CUSTOMER),
     validateRequest(productValidation.createProductSchema),
     productController.createProduct
@@ -25,6 +24,6 @@ router.patch(
     validateRequest(productValidation.updateProductSchema),
     productController.updateProduct
 );
-router.delete("/:id", checkAuth(Role.SUPER_ADMIN, Role.SUPER_ADMIN), productController.deleteProduct);
+router.delete("/:id", checkAuth(Role.SUPER_ADMIN, Role.CX_ADMIN), productController.deleteProduct);
 
 export const productRoutes = router;

@@ -1,16 +1,15 @@
 import { Currency, ListingType, ProductCondition, ProductStatus } from "@prisma/client";
 
 export interface ICreateProduct {
-    sellerId: string;
-    title: string;
-    slug: string;
+    productTitle: string;
     description: string;
-    categoryId: string;
     thumbnail?: string;
-    images?: string[];
+    images: string;
     price: number;
     currency?: Currency;
-    condition?: ProductCondition;
+    location: string;
+    tags?: string[];
+    productCondition?: ProductCondition;
     listingType?: ListingType;
     deliveryDays: number;
     revisions?: number;

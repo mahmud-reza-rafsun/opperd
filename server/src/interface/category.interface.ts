@@ -1,10 +1,11 @@
 export interface ICreateCategory {
     name: string;
     slug: string;
-    icon?: string;
-    description?: string;
-    parentId?: string;
-    isActive?: boolean;
+    image: string;
 }
 
-export interface IUpdateCategory extends Partial<ICreateCategory> { }
+export interface IUpdateCategory {
+    name?: string;
+    slug?: string;
+    image?: string;
+}

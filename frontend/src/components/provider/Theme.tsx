@@ -15,7 +15,7 @@ export default function Theme() {
             onClick={() =>
                 setTheme(resolvedTheme === "dark" ? "light" : "dark")
             }
-            className="h-8 w-8 rounded-lg cursor-pointer text-zinc-500 transition-colors dark:text-zinc-200 dark:hover:text-zinc-100"
+            className="h-9 w-9 p-2 rounded-lg cursor-pointer text-zinc-500 transition-colors dark:text-zinc-200 dark:hover:text-zinc-100"
             aria-label="Toggle theme"
         >
             {resolvedTheme === "dark" ? (

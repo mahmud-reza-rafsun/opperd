@@ -23,7 +23,6 @@ import { LogoutAction } from '../auth/actions/LogoutAction';
 export default function UserSession() {
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const { user, loading } = useUser() as { user: User | null; loading: boolean };
-    console.log(user);
     const handleLogout = async () => {
         setIsLoggingOut(true);
         const toastId = toast.loading("Logging out...");
