@@ -9,11 +9,13 @@ const router = Router();
 
 // Public routes
 router.get("/", productController.getAllProducts);
+// search product
+router.get("/search", productController.searchProducts);
 router.get("/:id", productController.getProductById);
 
 // Protected routes
 router.post(
-    "/:id",
+    "/",
     checkAuth(Role.SUPER_ADMIN, Role.CX_ADMIN, Role.CUSTOMER),
     validateRequest(productValidation.createProductSchema),
     productController.createProduct

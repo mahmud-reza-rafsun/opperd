@@ -21,29 +21,29 @@ export default function Navbar() {
 
             <div className="container mx-auto px-3 sm:px-4">
 
-                <div className="h-16 flex justify-between items-center gap-3 lg:gap-5">
+                <div className="relative h-16 flex justify-between items-center gap-3 lg:gap-5">
                     {/* Logo */}
-                    <Link
-                        href="/"
-                        className="flex shrink-0 items-center"
-                    >
+                    <Link href="/" className="z-10 flex shrink-0 items-center">
                         <Image
                             src="/logo.png"
                             alt="Opperd"
-                            width={76}
-                            height={76}
+                            width={170}
+                            height={170}
+                            quality={100}
                             priority
-                            className="h-11 w-auto object-contain"
+                            className=" object-contain"
                         />
                     </Link>
-                    <div className="hidden min-w-0 items-center justify-center px-2 md:flex lg:px-4">
-                        <div className="w-full max-w-2xl">
+
+                    {/* Desktop search bar - truly centered regardless of side widths */}
+                    <div className="pointer-events-none absolute inset-0 hidden items-center justify-center px-28 md:flex lg:px-40">
+                        <div className="pointer-events-auto w-full max-w-2xl">
                             <SearchBar />
                         </div>
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="flex shrink-0 items-center justify-end gap-1 ">
+                    <div className="z-10 flex shrink-0 items-center justify-end gap-1">
                         <div className="flex shrink-0 items-center md:hidden">
                             <SearchBar />
                         </div>
@@ -80,7 +80,7 @@ export default function Navbar() {
                             <UserMenu />
                         ) : (
                             <Button
-                                className="flex h-10 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-blue-500 px-2.5 md:px-4 text-sm text-white hover:bg-blue-500/90"
+                                className="flex h-9 md:h-10 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-blue-500 px-2.5 md:px-4 text-sm text-white hover:bg-blue-500/90"
                                 title="Join"
                             >
                                 <UserRoundPlus size={17} className="shrink-0" />
@@ -88,7 +88,6 @@ export default function Navbar() {
                             </Button>
                         )}
                     </div>
-
                 </div>
             </div>
 

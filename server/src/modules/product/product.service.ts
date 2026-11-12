@@ -1,11 +1,10 @@
 import { prisma } from "../../database/prisma";
 import { ICreateProduct, IProductFilter, IUpdateProduct } from "../../interface/product.interface";
 
-const createProduct = async (categoryId: string, sellerId: string, payload: ICreateProduct) => {
+const createProduct = async (sellerId: string, payload: ICreateProduct) => {
     const data = await prisma.product.create({
         data: {
             ...payload,
-            categoryId,
             sellerId,
         },
     });
@@ -25,6 +24,61 @@ const getAllProducts = async (filter: IProductFilter = {}) => {
         orderBy: { createdAt: "desc" },
     });
     return data;
+};
+
+const searchProducts = async (query: Record<string, any>) => {
+    const { searchTerm, ...filterData } = query;
+
+    const andConditions: any[] = [{ isDeleted: false }];
+
+    if (searchTerm) {
+        const cleanSearchTerm = (searchTerm as string).trim();
+
+        andConditions.push({
+            OR: [
+                {
+                    productTitle: {
+                        contains: cleanSearchTerm,
+                        mode: "insensitive",
+                    },
+                },
+                {
+                    description: {
+                        contains: cleanSearchTerm,
+                        mode: "insensitive",
+                    },
+                },
+            ],
+        });
+    }
+
+    if (Object.keys(filterData).length > 0) {
+        for (const [key, value] of Object.entries(filterData)) {
+            if (value) {
+                andConditions.push({
+                    [key]: value,
+                });
+            }
+        }
+    }
+
+    const whereConditions = { AND: andConditions };
+
+    const result = await prisma.product.findMany({
+        where: whereConditions,
+        select: {
+            id: true,
+            productTitle: true,
+            thumbnail: true,
+            price: true,
+            currency: true,
+        },
+        take: 10,
+        orderBy: { createdAt: "desc" },
+    });
+
+    // ডাটা না পেলে null না পাঠিয়ে সবসময় খালি অ্যারে [] রিটার্ন করবে
+    return result && result.length > 0 ? result : [];
 };
 
 const getProductById = async (id: string) => {
@@ -68,4 +122,5 @@ export const productService = {
     getProductById,
     updateProduct,
     deleteProduct,
+    searchProducts
 };

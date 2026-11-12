@@ -6,15 +6,15 @@ import { ArrowRight } from "lucide-react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import Image from "next/image";
-import { LEGAL_POLICIES, PolicyData } from "@/components/data/legalPolicies";
+import { LEGAL_POLICIES, PolicyData } from "@/components/data/policies";
 import LegalModal from "@/components/modules/FooterModal/FooterModal";
 import { COMPANY_DATA } from "@/components/data/company";
 import { SUPPORT_DATA } from "@/components/data/support";
 
-const BRAND = "OpperdEcom";
+const BRAND = "Opperd";
 const ADDRESS = "Dhaka, Bangladesh";
 const PHONE = "+880 162-87455220";
-const EMAIL = "rafsun16.it@gmail.com";
+const EMAIL = "support.opperd@gmail.com";
 
 const SOCIALS = [
     { label: "Facebook", href: "#", icon: FaFacebook },
@@ -47,8 +47,6 @@ const LINK_GROUPS: LinkGroup[] = [
         title: "Support",
         links: [
             { label: "FAQ", key: "faq" },
-            { label: "Documentation", key: "docs" },
-            { label: "Tutorial", key: "tutorial" },
             { label: "Support", key: "support" },
         ],
     },
@@ -57,9 +55,7 @@ const LINK_GROUPS: LinkGroup[] = [
         links: [
             { label: "Terms & Conditions", key: "terms" },
             { label: "Privacy Policy", key: "privacy" },
-            { label: "Refund Policy", key: "refund" },
             { label: "GDPR Compliance", key: "gdpr" },
-            { label: "Affiliate Policy", key: "affiliate" },
         ],
     },
 ];
@@ -272,7 +268,7 @@ export default function Footer() {
                 />
             </footer>
             <div className="border-t border-zinc-300 dark:border-zinc-800 py-1.5 text-center text-sm text-muted-foreground">
-                <p>© 2026 Opperd/ecom. All rights reserved.</p>
+                <p>© 2026 Opperd. All rights reserved.</p>
             </div>
         </div>
     );

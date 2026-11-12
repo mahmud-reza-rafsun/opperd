@@ -1,8 +1,10 @@
 import { Currency, ListingType, ProductCondition, ProductStatus } from "@prisma/client";
 
+
 export interface ICreateProduct {
     productTitle: string;
     description: string;
+    categoryId: string;
     thumbnail?: string;
     images: string;
     price: number;
@@ -12,11 +14,8 @@ export interface ICreateProduct {
     productCondition?: ProductCondition;
     listingType?: ListingType;
     deliveryDays: number;
-    revisions?: number;
-    status?: ProductStatus;
-    isFeatured?: boolean;
-    expiresAt?: Date;
 }
+
 
 export interface IUpdateProduct extends Partial<ICreateProduct> { }
 

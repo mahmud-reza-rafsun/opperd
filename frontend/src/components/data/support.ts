@@ -4,9 +4,10 @@ import {
     LifeBuoy,
     Terminal,
     ShieldAlert,
-    Cpu,
     Wrench,
-    FileCode2,
+    Package,
+    Camera,
+    Tag,
     LucideIcon,
 } from "lucide-react";
 
@@ -27,128 +28,127 @@ export interface PolicyData {
 export const SUPPORT_DATA: Record<string, PolicyData> = {
     faq: {
         title: "Frequently Asked Questions",
-        lastUpdated: "October 2026",
+        lastUpdated: "November 2026",
         description:
-            "Comprehensive answers regarding our web development process, project timelines, pricing, and post-launch commitments.",
+            "Answers to common questions about buying and selling on Opperd in the EU and UK.",
         sections: [
             {
                 id: "A",
                 icon: HelpCircle,
-                title: "Project Development & Timelines",
+                title: "General",
                 items: [
-                    "Q: How long does it take to complete a web project? - A: Typical landing pages take 5 to 7 days, while full-stack web applications and ERP solutions take 3 to 6 weeks.",
-                    "Q: What information do you need to start a project? - A: We require a project scope brief, wireframes/brand guidelines (if available), and target feature requirements.",
-                    "Q: Can you work with existing codebases? - A: Yes, we specialize in refactoring, updating, and scaling existing React/Next.js/Node.js applications.",
+                    "Q: Where is Opperd available? - A: Opperd is available only to users in the European Union and the United Kingdom.",
+                    "Q: Does Opperd sell products? - A: No. Opperd is a platform. Products are sold directly between users.",
+                    "Q: Is there a fee to use Opperd? - A: Fee information, if any, is shown clearly in the listing or account settings before you publish.",
                 ],
             },
             {
                 id: "B",
-                icon: Cpu,
-                title: "Pricing, Ownership & Revisions",
+                icon: Tag,
+                title: "Buying & Selling",
                 items: [
-                    "Q: Do I own the code after completion? - A: Yes, 100% full intellectual property and repository rights are transferred to you after final payment.",
-                    "Q: How are revisions handled? - A: Each project package includes dedicated revision cycles during the UI preview and staging deployment phases.",
-                    "Q: What payment terms do you offer? - A: Standard projects operate on a milestone structure (e.g., 40% upfront, 30% mid-stage, 30% final deployment).",
+                    "Q: How do I sell a product? - A: Create an account, upload photos, add a description and price, then publish your listing.",
+                    "Q: How do I buy a product? - A: Find a listing, message the seller, and arrange payment and collection with them.",
+                    "Q: Can I return a product? - A: Opperd does not handle returns. Returns, if any, are agreed between buyer and seller.",
                 ],
             },
             {
                 id: "C",
-                icon: Wrench,
-                title: "Hosting & Technical Maintenance",
+                icon: Package,
+                title: "Account & Listings",
                 items: [
-                    "Q: Do you handle hosting and domain deployment? - A: Yes, we deploy and configure servers on Vercel, AWS, DigitalOcean, or custom VPS environments.",
-                    "Q: What happens after the project is launched? - A: All projects include 30 days of free post-launch bug fixing and monitoring.",
+                    "Q: Can I edit or remove my listing? - A: Yes, you can edit or delete your listing at any time from your dashboard.",
+                    "Q: Why was my listing removed? - A: Listings are removed if they break our Terms & Conditions. You can contact us for details.",
                 ],
             },
         ],
     },
-    docs: {
-        title: "Project Handoff & Technical Documentation",
-        lastUpdated: "October 2026",
+    guide: {
+        title: "Buying & Selling Guide",
+        lastUpdated: "November 2026",
         description:
-            "Guidelines and operational documentation provided to client engineering teams upon project completion.",
+            "Step-by-step instructions for buyers and sellers using the Opperd platform.",
+        sections: [
+            {
+                id: "A",
+                icon: BookOpen,
+                title: "For Buyers",
+                items: [
+                    "Browse or search listings and check the description, photos, and condition.",
+                    "Message the seller with any questions before agreeing to buy.",
+                    "Agree on payment and collection, meet in a safe place, and check the item before paying.",
+                ],
+            },
+            {
+                id: "B",
+                icon: Package,
+                title: "For Sellers",
+                items: [
+                    "Create an account and complete your profile.",
+                    "Upload clear photos and describe any defects honestly.",
+                    "Respond to buyer messages promptly and arrange a safe handover.",
+                ],
+            },
+            {
+                id: "C",
+                icon: Camera,
+                title: "Photo Tips",
+                items: [
+                    "Use natural daylight and a plain background.",
+                    "Show the product from front, back, sides, and any damaged areas.",
+                ],
+            },
+        ],
+    },
+    tech_help: {
+        title: "Website & Account Help",
+        lastUpdated: "November 2026",
+        description:
+            "Help with account access, website issues, and technical problems on the Opperd platform.",
         sections: [
             {
                 id: "A",
                 icon: Terminal,
-                title: "Environment & System Requirements",
+                title: "Account & Login",
                 items: [
-                    "Runtime Requirements: Node.js v20+, Bun runtime (optional for fast package execution).",
-                    "Database Setup: PostgreSQL database instance with Prisma CLI configuration for migrations.",
-                    "Environment Variables: Complete `.env.example` templates provided with encrypted configuration keys.",
-                ],
-            },
-            {
-                id: "B",
-                icon: FileCode2,
-                title: "Deployment Procedures",
-                items: [
-                    "Vercel Deployment: Zero-config Next.js deployment with automated GitHub action pipelines.",
-                    "Docker Containerization: Pre-configured Dockerfile and docker-compose configurations for self-hosted servers.",
-                    "Database Migrations: Run `npx prisma migrate deploy` to synchronize schema changes in production.",
-                ],
-            },
-            {
-                id: "C",
-                icon: BookOpen,
-                title: "Architecture & API Structure",
-                items: [
-                    "RESTful API & Server Actions documentation formatted with Swagger / Postman collections.",
-                    "Role-Based Access Control (RBAC) middleware implementation details for secure endpoint protection.",
-                ],
-            },
-        ],
-    },
-    tutorial: {
-        title: "Tutorials & Client Management Guides",
-        lastUpdated: "October 2026",
-        description:
-            "Step-by-step instructions for non-technical site administrators to manage content, products, and user data.",
-        sections: [
-            {
-                id: "A",
-                icon: BookOpen,
-                title: "Admin Dashboard Navigation",
-                items: [
-                    "Content Updates: How to create, edit, and publish dynamic blog posts or service listings using the CMS panel.",
-                    "User Management: Assigning administrative roles, moderating comments, and checking user activity logs.",
-                    "E-Commerce Management: Updating product stock, setting up discount codes, and processing order statuses.",
+                    "Forgot password: Use the reset link on the login page to receive a reset email.",
+                    "Update profile: Go to account settings to change your details.",
                 ],
             },
             {
                 id: "B",
                 icon: Wrench,
-                title: "Performance & Asset Best Practices",
+                title: "Common Issues",
                 items: [
-                    "Media Uploads: Compress images to WebP format before uploading to optimize page speed.",
-                    "SEO Setup: Updating page metadata, Open Graph preview tags, and social sharing icons directly in dashboard settings.",
+                    "Page not loading: Clear your browser cache or try a different browser.",
+                    "Photos not uploading: Check the file size and format, then try again.",
                 ],
             },
         ],
     },
     support: {
-        title: "Technical Support & SLA",
-        lastUpdated: "October 2026",
+        title: "Customer Support",
+        lastUpdated: "November 2026",
         description:
-            "Comprehensive post-launch technical assistance, maintenance packages, and emergency support channels.",
+            "How to contact the Opperd team for account, listing, or platform help.",
         sections: [
             {
                 id: "A",
                 icon: LifeBuoy,
-                title: "Support Tiers & Offerings",
+                title: "Support Channel",
                 items: [
-                    "Standard Warranty: 30 days of complimentary bug resolution following production launch.",
-                    "Monthly Maintenance Plan: Regular dependency updates, database backups, performance audits, and uptime monitoring.",
-                    "Dedicated SLA Contract: Guaranteed 1-hour critical response time for enterprise clients.",
+                    "Email: contact.opperd@gmail.com",
+                    "Please include your account email and a clear description of the issue.",
                 ],
             },
             {
                 id: "B",
                 icon: ShieldAlert,
-                title: "Emergency Incident Resolution",
+                title: "Reports & Safety",
                 items: [
-                    "Critical Server Downtime: Direct emergency hotlines for immediate server restoration.",
-                    "Security Patching: Urgent deployment of security fixes for identified vulnerabilities or data leaks.",
+                    "Report a listing or user using the report button on the listing page.",
+                    "For urgent safety concerns, contact the police or local emergency services first.",
+                    "Suspected fraud should also be reported to your bank and, where relevant, to Action Fraud (UK) or your national consumer authority (EU).",
                 ],
             },
         ],

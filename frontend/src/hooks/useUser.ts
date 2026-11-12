@@ -21,6 +21,7 @@ export function useUser() {
             }
 
             const data = await response.json();
+            console.log(data);
             setUser(data?.data || data);
             setError(null);
         } catch (err) {

@@ -29,7 +29,7 @@ model Product {
   payments  Payment[]
   cartItems CartItem[]
 
-  @@index([sellerId, status])
+  @@index([sellerId, status, productTitle])
   @@index([categoryId, status])
   @@index([status, createdAt])
   @@map("product")

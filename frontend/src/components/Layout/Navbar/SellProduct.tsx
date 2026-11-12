@@ -33,27 +33,30 @@ import { Plus, Image as ImageIcon, Trash2, X, MapPin, TriangleAlertIcon } from "
 import { Textarea } from "@/components/ui/textarea";
 import { useCategories } from "@/hooks/useCategories";
 import { useUser } from "@/hooks/useUser";
+import { sellProducts } from "@/components/actions/product.action";
+import { toast } from "sonner";
 
 export default function SellProduct() {
     const [isOpen, setIsOpen] = useState(false);
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const { user } = useUser();
     const router = useRouter();
-    const [title, setTitle] = useState("");
+    const [productTitle, setProductTitle] = useState("");
     const [price, setPrice] = useState("");
     const [currency, setCurrency] = useState("EUR");
     const [categoryId, setCategoryId] = useState("");
-    const [condition, setCondition] = useState("GOOD");
+    const [productCondition, setProductCondition] = useState("GOOD");
     const [listingType, setListingType] = useState("SELL");
     const [deliveryDays, setDeliveryDays] = useState("3");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
     const [tagInput, setTagInput] = useState("");
     const [tags, setTags] = useState<string[]>([]);
+    const [imageUrl, setImageUrl] = useState("");
 
     const { categories, loading, error } = useCategories();
 
-    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [images, setImagePreviews] = useState<string[]>([]);
 
     const handleOpenChange = (open: boolean) => {
         if (open && !user) {
@@ -81,7 +84,7 @@ export default function SellProduct() {
                     }
                 },
                 () => {
-                    alert("Unable to fetch location. Please type manually.");
+                    toast.error("Unable to fetch location. Please type manually.");
                 }
             );
         }
@@ -102,16 +105,19 @@ export default function SellProduct() {
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (files) {
-            const fileArray = Array.from(files);
-            const newUrls = fileArray.map((file) => URL.createObjectURL(file));
-            setImagePreviews((prev) => [...prev, ...newUrls].slice(0, 3));
-        }
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const preview = URL.createObjectURL(file);
+        setImagePreviews([preview]);
+        setImageUrl(preview);
+
+        e.target.value = "";
     };
 
     const handleRemoveImage = (indexToRemove: number) => {
         setImagePreviews((prev) => prev.filter((_, index) => index !== indexToRemove));
+        setImageUrl("");
     };
 
     const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -122,22 +128,32 @@ export default function SellProduct() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({
-            title,
+
+        const res = await sellProducts({
+            productTitle,
+            description,
+            categoryId,
             price,
             currency,
-            categoryId,
-            condition,
+            productCondition,
             listingType,
-            deliveryDays: Number(deliveryDays),
             location,
-            description,
+            deliveryDays,
             tags,
-            imagePreviews,
+            thumbnail: imageUrl,
+            images: imageUrl,
         });
+
+        if (res.error) {
+            toast.error(res.error);
+            return;
+        }
+
+        toast.success("Product published successfully!");
         setIsOpen(false);
+        router.refresh();
     };
 
     const wordCount = description.trim() ? description.trim().split(/\s+/).length : 0;
@@ -146,8 +162,7 @@ export default function SellProduct() {
         <>
             <Dialog open={isOpen} onOpenChange={handleOpenChange}>
                 <DialogTrigger asChild>
-                    <Button className="bg-blue-500 hover:bg-blue-500/90 text-white h-9 md:h-10 text-sm
-                     cursor-pointer flex items-center gap-1.5 font-medium">
+                    <Button className="bg-blue-500 hover:bg-blue-500/90 text-white h-9 md:h-10 text-sm cursor-pointer flex items-center gap-1.5 font-medium">
                         <Plus size={20} className="shrink-0" />
                         <span className="hidden md:inline">Sell Product</span>
                     </Button>
@@ -164,13 +179,13 @@ export default function SellProduct() {
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5 py-2">
                         <div className="grid gap-2">
-                            <Label htmlFor="title" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                            <Label htmlFor="productTitle" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                                 Product Title
                             </Label>
                             <Input
-                                id="title"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
+                                id="productTitle"
+                                value={productTitle}
+                                onChange={(e) => setProductTitle(e.target.value)}
                                 placeholder="e.g. iPhone 13 Pro Max / Minimal Sofa"
                                 className="h-10 px-4"
                                 required
@@ -197,24 +212,6 @@ export default function SellProduct() {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                                    Listing Type
-                                </Label>
-                                <Select value={listingType} onValueChange={setListingType}>
-                                    <SelectTrigger className="h-10 py-4.75 px-4 w-full">
-                                        <SelectValue placeholder="Select type" />
-                                    </SelectTrigger>
-                                    <SelectContent position="popper" className="mt-1">
-                                        <SelectItem value="SELL" className="py-1.5">Sell</SelectItem>
-                                        <SelectItem value="RENT" className="py-1.5">Rent</SelectItem>
-                                        <SelectItem value="SERVICE" className="py-1.5">Service</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="grid gap-2">
                                 <Label htmlFor="price" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                                     Price
                                 </Label>
@@ -229,7 +226,12 @@ export default function SellProduct() {
                                     required
                                 />
                             </div>
+                        </div>
 
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+                            {/* pending */}
                             <div className="grid gap-2">
                                 <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                                     Currency
@@ -240,23 +242,19 @@ export default function SellProduct() {
                                     </SelectTrigger>
                                     <SelectContent position="popper" className="mt-1">
                                         <SelectItem value="EUR" className="py-1.5">EUR (€)</SelectItem>
-                                        <SelectItem value="USD" className="py-1.5">USD ($)</SelectItem>
-                                        <SelectItem value="BDT" className="py-1.5">BDT (৳)</SelectItem>
+                                        <SelectItem value="GBP" className="py-1.5">GBP (£)</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
                                     Item Condition
                                 </Label>
-                                <Select value={condition} onValueChange={setCondition}>
+                                <Select value={productCondition} onValueChange={setProductCondition}>
                                     <SelectTrigger className="h-12 py-4.75 px-4 w-full">
                                         <SelectValue placeholder="Select condition" />
                                     </SelectTrigger>
-                                    <SelectContent position="popper" className=" mt-1">
+                                    <SelectContent position="popper" className="mt-1">
                                         <SelectItem value="NEW" className="py-1.5">Brand New</SelectItem>
                                         <SelectItem value="LIKE_NEW" className="py-1.5">Like New</SelectItem>
                                         <SelectItem value="GOOD" className="py-1.5">Good Condition</SelectItem>
@@ -264,6 +262,10 @@ export default function SellProduct() {
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
 
                             <div className="grid gap-2">
                                 <Label htmlFor="deliveryDays" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
@@ -279,31 +281,33 @@ export default function SellProduct() {
                                     required
                                 />
                             </div>
-                        </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="location" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                                Location
-                            </Label>
-                            <div className="relative flex items-center">
-                                <Input
-                                    id="location"
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    placeholder="e.g. Berlin, Germany"
-                                    className="h-10 px-4 pr-11"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={handleGetLocation}
-                                    title="Use my current location"
-                                    className="absolute right-3 text-zinc-400 hover:text-blue-600 transition-colors cursor-pointer p-1.5"
-                                >
-                                    <MapPin size={20} />
-                                </button>
+                            <div className="grid gap-2">
+                                <Label htmlFor="location" className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                                    Location
+                                </Label>
+                                <div className="relative flex items-center">
+                                    <Input
+                                        id="location"
+                                        value={location}
+                                        onChange={(e) => setLocation(e.target.value)}
+                                        placeholder="e.g. Berlin, Germany"
+                                        className="h-10 px-4 pr-11"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleGetLocation}
+                                        title="Use my current location"
+                                        className="absolute right-3 text-zinc-400 hover:text-blue-600 transition-colors cursor-pointer p-1.5"
+                                    >
+                                        <MapPin size={20} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+
 
                         <div className="grid gap-2">
                             <div className="flex justify-between items-center">
@@ -327,12 +331,12 @@ export default function SellProduct() {
                         <div className="grid gap-2">
                             <div className="flex justify-between items-center">
                                 <Label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                                    Upload Images (Max 3)
+                                    Upload Image
                                 </Label>
-                                <span className="text-xs text-zinc-400">{imagePreviews.length}/3 selected</span>
+                                <span className="text-xs text-zinc-400">{images.length}/1 selected</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-3">
-                                {imagePreviews.length < 3 && (
+                                {images.length < 1 && (
                                     <label
                                         htmlFor="image-upload"
                                         className="flex flex-1 min-w-[160px] items-center justify-center gap-2.5 h-12 px-5 rounded-xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-sm text-zinc-600 dark:text-zinc-400 cursor-pointer hover:border-blue-500 transition-colors font-medium"
@@ -343,7 +347,6 @@ export default function SellProduct() {
                                             id="image-upload"
                                             type="file"
                                             accept="image/*"
-                                            multiple
                                             onChange={handleImageChange}
                                             className="hidden"
                                         />
@@ -351,9 +354,9 @@ export default function SellProduct() {
                                 )}
 
                                 <div className="flex items-center gap-2.5">
-                                    {imagePreviews.map((src, index) => (
+                                    {images.map((src, index) => (
                                         <div key={index} className="relative size-12 rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800 shrink-0 shadow-sm">
-                                            <img src={src} alt={`Preview ${index + 1}`} className="h-full w-full object-cover" />
+                                            <img src={src} alt="Preview" className="h-full w-full object-cover" />
                                             <button
                                                 type="button"
                                                 onClick={() => handleRemoveImage(index)}

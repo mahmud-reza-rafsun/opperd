@@ -5,16 +5,15 @@ import { catchAsync } from "../../shared/utils/catchAsync";
 import { sendResponse } from "../../shared/utils/sendResponse";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
-    const categoryId = req.params.id;
     const sellerId = req.user.id;
     const payload = req.body;
 
-    const data = await productService.createProduct(categoryId as string, sellerId, payload);
+    const data = await productService.createProduct(sellerId, payload);
 
     sendResponse(res, {
         status: status.CREATED,
         success: true,
-        message: `Product created successfully under category: ${data.categoryId}`,
+        message: `Product created successfully under category`,
         data,
     });
 });
@@ -28,6 +27,17 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
         status: status.OK,
         success: true,
         message: "Products fetched successfully",
+        data,
+    });
+});
+
+const searchProducts = catchAsync(async (req: Request, res: Response) => {
+    const query = req.query;
+    const data = await productService.searchProducts(query);
+    sendResponse(res, {
+        status: status.OK,
+        success: true,
+        message: "Search results fetched successfully",
         data,
     });
 });
@@ -77,4 +87,5 @@ export const productController = {
     getProductById,
     updateProduct,
     deleteProduct,
+    searchProducts
 };
